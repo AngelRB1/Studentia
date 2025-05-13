@@ -1,10 +1,11 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.contrib import admin
 from general import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from general.views import CustomPasswordResetView, CustomPasswordResetConfirmView
+from django.views.static import serve
 
 urlpatterns = [
     #primer sprint
@@ -37,8 +38,9 @@ urlpatterns = [
     path("board/<str:codigo_acceso>/actividad/<int:id_actividad>/edit", views.content_edit, name="content_edit"),
     path("board/<str:codigo_acceso>/actividad/<int:id_actividad>/delete", views.content_delete, name="content_delete"),
     path('board/<str:codigo_acceso>/actividad/<int:id_actividad>/view', views.content_detail, name='content_detail'),
-
-
+    
+    #Configuracion Temporal
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 
 
