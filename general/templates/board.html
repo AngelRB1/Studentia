@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% load static humanize %}
+
+{% block title %}{{ curso.nombre_curso }}{% endblock %}
+
+{% block styles %}
+    <link href="//fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .custom-section {
+            background: #FFFFFF;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .custom-title {
+            color: #1A3C5A !important;
+            font-size: 2.8rem !important;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+        .custom-subtitle {
+            color: #1A3C5A !important;
+            font-size: 1.8rem !important;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        .course-details {
+            color: #4A4A4A !important;
+            font-size: 1.1rem !important;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 10px;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .course-details strong {
+            color: #1A3C5A !important;
+            font-weight: 600;
+        }
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto;
+            max-width: 600px;
+            text-align: left;
+        }
+        .activity-list li {
+            color: #4A4A4A !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .activity-list li strong {
+            color: #1A3C5A !important;
+            font-weight: 600;
+        }
+        .activity-list li a {
+            color: #1A3C5A !important;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .activity-list li a:hover {
+            color: #FF5733 !important;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            margin-left: 5px;
+        }
+        .badge.bg-success {
+            background-color: #28a745 !important;
+            color: #FFFFFF !important;
+        }
+        .badge.bg-warning {
+            background-color: #F5A623 !important;
+            color: #FFFFFF !important;
+        }
+        .badge.bg-info {
+            background-color: #17a2b8 !important;
+            color: #FFFFFF !important;
+        }
+        .text-muted {
+            color: #4A4A4A !important;
+            font-size: 0.9rem !important;
+            font-family: 'Poppins', sans-serif;
+        }
+        .empty-message {
+            color: #4A4A4A !important;
+            font-size: 1.1rem !important;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+        }
+        .custom-button {
+            background-color: #1A3C5A !important;
+            border: none !important;
+            padding: 12px 30px !important;
+            font-size: 1.2rem !important;
+            border-radius: 25px !important;
+            transition: background-color 0.3s ease !important;
+            color: #FFFFFF !important;
+            text-decoration: none !important;
+            display: inline-block;
+            margin: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        .custom-button:hover {
+            background-color: #FF5733 !important;
+        }
+        .custom-button--sm {
+            padding: 8px 15px !important;
+            font-size: 1rem !important;
+            border-radius: 50%; /* Hacer botones circulares */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .custom-button--view {
+            background-color: #a855f7 !important;
+            color: #FFFFFF !important;
+        }
+        .custom-button--edit {
+            background-color: #F5A623 !important;
+            color: #FFFFFF !important;
+        }
+        .custom-button--delete {
+            background-color: #dc3545 !important;
+            color: #FFFFFF !important;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .custom-button i {
+            color: white;
+            font-size: 1rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<section class="w3l-contact-section py-5" style="background-color: #F5F8FF;">
+    <div class="container py-md-5 py-4">
+        <div class="text-center">
+            <div class="custom-section">
+                <h2 class="custom-title">{{ curso.nombre_curso }}</h2>
+                <p class="course-details"><strong>Profesor:</strong> {{ curso.id_profesor.username }}</p>
+                <p class="course-details"><strong>Descripción:</strong> {{ curso.descripcion }}</p>
+
+                {% if request.user == curso.id_profesor %}
+                    <h3 class="custom-subtitle">Acciones Rápidas</h3>
+                    <a href="{% url 'board_add_content' curso.codigo_acceso %}" class="custom-button">Agregar Contenido</a>
+                    <a href="{% url 'board_view_students' curso.codigo_acceso %}" class="custom-button">Ver alumnos inscritos</a>
+                {% else %}
+                    <a href="{% url 'board_view_students' curso.codigo_acceso %}" class="custom-button">Ver alumnos inscritos</a>
+                {% endif %}
+
+                <h3 class="custom-subtitle">Tablero</h3>
+
+                {% if actividades %}
+                    <ul class="activity-list">
+                        {% for act in actividades %}
+                            <li>
+                                <div>
+                                    <strong>{{ act.titulo }}</strong> 
+                                    {% if act.archivo %}
+                                        - <a href="{{ act.archivo.url }}" target="_blank">Ver archivo</a>
+                                    {% endif %}
+                                    {% if act.entregable %}
+                                        <span class="badge bg-success">Entregable</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Contenido</span>
+                                    {% endif %}
+                                    {% if act.generado_por_ia %}
+                                        <span class="badge bg-warning text-dark">IA</span>
+                                    {% endif %}
+                                    {% if act.permite_entrega_tardia %}
+                                        <span class="badge bg-info">Permite entrega tardía</span>
+                                    {% endif %}
+                                    <br>
+                                    <small class="text-muted">
+                                        Publicado {{ act.fecha|naturaltime }} {{ act.fecha|date:'d M Y, H:i' }}.
+                                    </small>
+                                </div>
+                                <div class="button-group">
+                                    <a href="{% url 'content_detail' curso.codigo_acceso act.id %}" class="custom-button custom-button--sm custom-button--view" title="Ver">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if request.user == curso.id_profesor %}
+                                        <a href="{% url 'content_edit' curso.codigo_acceso act.id %}" class="custom-button custom-button--sm custom-button--edit" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'content_delete' curso.codigo_acceso act.id %}" class="custom-button custom-button--sm custom-button--delete" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="empty-message">No hay actividades aún.</p>
+                {% endif %}
+                 <a href="{% url 'dashboard' %}" class="custom-button mt-3">Volver a Dashboard</a>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+{% endblock %}
